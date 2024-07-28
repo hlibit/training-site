@@ -47,6 +47,7 @@ const TrainerSchema = new Schema(
     },
     token: { type: String, default: null },
     sportsmen: [{ type: Schema.Types.ObjectId, ref: "Sportsman" }],
+    trainings:[{ type: Schema.Types.ObjectId, ref: "Training" }]
   },
   {
     timestamps: false,

@@ -8,3 +8,7 @@ POST /add 500 67 - 17.292 ms
 POST /add 201 243 - 56.450 ms
 POST /add 500 111 - 60.906 ms
 POST /add 201 240 - 43.102 ms
+POST /add 404 143 - 2.362 ms
+POST /add 400 43 - 4.094 ms
+POST /add/trn 201 148 - 62.754 ms
+POST /add/trn 400 51 - 3.658 ms

@@ -1,9 +1,10 @@
 const Joi = require("joi");
 const {Sportsman} = require("./Sportsman");
 const {Trainer} = require("./Trainer");
+const {Training} = require("./Training");
 
-
-const sportsmanValidationSchema = Joi.object({
+//validation
+const userValidationSchema = Joi.object({
     name: Joi.string().required().min(4).max(30).messages({
         "string.base": `"name" should be a string`,
         "string.empty": `"name" must not be empty`,
@@ -52,11 +53,39 @@ const sportsmanValidationSchema = Joi.object({
         "any.required": `"sports" is required`
     }),
 });
+//trainings
+const trainingValidaionSchema = Joi.object({
+    sports: Joi.string().required().valid('Power-Lifting', 'Swimming', 'Fitness', 'Running', 'Boxing', 'Cross-Fit').messages({
+        "string.base": `"sports" should be a string`,
+        "string.empty": `"sports" must not be empty`,
+        "any.only": `"sports" must be one of [Power-Lifting, Swimming, Fitness, Running, Boxing, Cross-Fit]`,
+        "any.required": `"sports" is required`
+    }),
+    energy: Joi.number().required().min(300).max(800).messages({
+        "number.base": `"calories" should be a number`,
+        "number.min": `"calories" must be at least {#limit}`,
+        "number.max": `"calories" must be at most {#limit}`,
+        "any.required": `"calories" is required`
+    }),
+    duration: Joi.number().required().min(45).max(120).messages({
+        "number.base": `"duration" should be a number`,
+        "number.min": `"duration" must be at least {#limit}`,
+        "number.max": `"duration" must be at most {#limit}`,
+        "any.required": `"duration" is required`
+    }),
+
+})
 
 const validate = (user) =>{
-    const result = sportsmanValidationSchema.validate(user);
+    const result = userValidationSchema.validate(user);
     if(result.error) return result.error.details.map((detail)=> detail.message);
     return null;
 }
 
-module.exports = {Sportsman,Trainer,validate};
+const validateTraining = (trng) => {
+    const result = trainingValidaionSchema.validate(trng);
+    if (result.error) return result.error.details.map((detail) => detail.message );
+    return null;
+}
+
+module.exports = {Sportsman,Trainer,Training,validate ,validateTraining};

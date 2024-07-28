@@ -5,7 +5,7 @@ const fs = require("fs").promises;
 // const path = require("path");
 
 //temp check
-const { Sportsman, Trainer, validate } = require("./models/index");
+const { Sportsman, Trainer, Training, validate, validateTraining } = require("./models/index");
 
 
 app.use(express.json());
@@ -41,6 +41,7 @@ app.use(logger);
 //           password,
 //           typeUser,
 //           trainers: [],
+//           trainings: []
 //         });
 //         await sportsman.save();
 //         res.status(201).json({
@@ -59,6 +60,7 @@ app.use(logger);
 //           password,
 //           typeUser,
 //           sportsmen: [],
+//           trainings: []
 //         });
 //         await trainer.save();
 //         res.status(201).json({
@@ -71,6 +73,29 @@ app.use(logger);
 //         res.status(400).json({ message: "Invalid typeUser" });
 //       }
 //     }
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   }
+// });
+
+//future add training module
+// app.post("/add/trn", async (req, res) => {
+//   const {  sports, energy, duration} = req.body;
+//   const findErrors = validateTraining(req.body);
+//   if (findErrors) return res.status(400).json({ findErrors });
+//   try {
+//          const training = new Training({
+//           sports,
+//           energy,
+//           duration,
+//           trainers: [],
+//           sportsmen: []
+//         });
+//         await training.save();
+//         res.status(201).json({
+//           message: "training created",
+//           data: training,
+//         });    
 //   } catch (error) {
 //     res.status(500).send(error.message);
 //   }
