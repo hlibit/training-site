@@ -20,10 +20,10 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).send("Login first");
   }
 
-  if (!token) {
-    return res.status(401).send("No token provided");
-  }
-//maynbe session destroy add
+  // if (!token) {
+  //   return res.status(401).send("No token provided");
+  // }
+  //maynbe session destroy add
 
   jwt.verify(token, SECRET_KEY, async (err, user) => {
     if (err) {
@@ -38,12 +38,10 @@ const authenticateToken = (req, res, next) => {
         await trainer.save();
         res.status(403).send("U must be logged in");
       }
-    } else return res.send("welcome");
+    }
     req.user = user;
     next();
   });
- 
-    
 };
 
 const loginUser = async (req, res) => {
@@ -60,13 +58,16 @@ const loginUser = async (req, res) => {
         if (!isMatch) return res.status(404).send("Invalid password");
 
         const token = jwt.sign({ id: sportsman._id }, SECRET_KEY, {
-          expiresIn: "10s",
+          expiresIn: "1h",
         });
         sportsman.token = token;
         await sportsman.save();
         if (sportsman && (await bcrypt.compare(password, sportsman.password))) {
           req.session.userId = sportsman._id;
-          res.cookie("token", token, { httpOnly: true });
+          res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60,
+          });
           res.status(201).json({
             token: token,
             Status: "You logined succesfully",
@@ -81,14 +82,14 @@ const loginUser = async (req, res) => {
         if (!isMatchT) return res.status(404).send("Invalid password");
 
         const tokenT = jwt.sign({ id: trainer._id }, SECRET_KEY, {
-          expiresIn: "10s",
+          expiresIn: "1h",
         });
         trainer.token = tokenT;
         await trainer.save();
 
         if (trainer && (await bcrypt.compare(password, trainer.password))) {
           req.session.userId = trainer._id;
-          res.cookie("token", tokenT, { httpOnly: true });
+          res.cookie("token", tokenT, { httpOnly: true, maxAge: 1000 * 60*60 });
           res.status(201).json({
             token: tokenT,
             Status: "You logined succesfully",

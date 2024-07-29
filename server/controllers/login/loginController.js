@@ -8,4 +8,4 @@ loginRouter.use(newSession);
 loginRouter.get("/login/check",authenticateToken)
 loginRouter.get("/login", loginUser);
 
-module.exports = {loginRouter};
+module.exports = {loginRouter , authenticateToken};

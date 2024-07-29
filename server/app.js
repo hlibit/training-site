@@ -5,7 +5,8 @@ const fs = require("fs").promises;
 // const path = require("path");
 
 const {registerRouter} = require("./controllers/registration/registerController")
-const {loginRouter} = require("./controllers/login/loginController")
+const {loginRouter} = require("./controllers/login/loginController");
+const {mainRouter} = require("./controllers/main/index");
 
 //temp check
 const { Training, validateTraining } = require("./models/index");
@@ -28,8 +29,10 @@ const logger = morgan("tiny", {
 });
 app.use(logger);
 
-
 app.use("/api", registerRouter,loginRouter)
+app.use("/api/main", mainRouter);
+
+
 //future add training module
 // app.post("/add/trn", async (req, res) => {
 //   const {  sports, energy, duration} = req.body;

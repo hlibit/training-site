@@ -61,6 +61,12 @@ const trainingValidaionSchema = Joi.object({
         "any.only": `"sports" must be one of [Power-Lifting, Swimming, Fitness, Running, Boxing, Cross-Fit]`,
         "any.required": `"sports" is required`
     }),
+    level: Joi.string().required().valid('light', 'medium', 'hard').messages({
+        "string.base": `"level" should be a string`,
+        "string.empty": `"level" must not be empty`,
+        "any.only": `"level" must be one of [light, medium, hard]`,
+        "any.required": `"level" is required`
+    }),
     energy: Joi.number().required().min(300).max(800).messages({
         "number.base": `"calories" should be a number`,
         "number.min": `"calories" must be at least {#limit}`,

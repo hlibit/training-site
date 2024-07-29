@@ -14,6 +14,15 @@ const TrainingSchema = new Schema(
         "Cross-Fit",
       ],
     },
+    level:{
+      type: String,
+      required: true,
+      enum: [
+        "light",
+        "medium",
+        "hard",
+      ],
+    },
     energy: {
       type: Number,
       required: true,
