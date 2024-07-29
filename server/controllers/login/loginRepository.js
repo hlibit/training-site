@@ -9,7 +9,7 @@ const newSession = session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 1000 * 60 * 60,
+    maxAge: 1000 * 60 * 60 * 12,
   },
 });
 
@@ -54,15 +54,16 @@ const loginUser = async (req, res) => {
         const sportsman = await Sportsman.findOne({ email });
         if (!sportsman)
           return res.status(404).send(`User with ${email} [email] not found.`);
-        const isMatch = bcrypt.compare(password, sportsman.password);
+        const isMatch = await bcrypt.compare(password, sportsman.password);
         if (!isMatch) return res.status(404).send("Invalid password");
 
         const token = jwt.sign({ id: sportsman._id }, SECRET_KEY, {
           expiresIn: "1h",
         });
+       
         sportsman.token = token;
         await sportsman.save();
-        if (sportsman && (await bcrypt.compare(password, sportsman.password))) {
+        if (sportsman && (isMatch)) {
           req.session.userId = sportsman._id;
           res.cookie("token", token, {
             httpOnly: true,
@@ -72,13 +73,13 @@ const loginUser = async (req, res) => {
             token: token,
             Status: "You logined succesfully",
           });
-        } else res.status(500).send("Authorization error");
+        } else res.status(500).json({message : "Authorization error"});
         break;
       case "Trainer":
         const trainer = await Trainer.findOne({ email });
         if (!trainer)
           return res.status(404).send(`User with ${email} [email] not found.`);
-        const isMatchT = bcrypt.compare(password, trainer.password);
+        const isMatchT = await bcrypt.compare(password, trainer.password);
         if (!isMatchT) return res.status(404).send("Invalid password");
 
         const tokenT = jwt.sign({ id: trainer._id }, SECRET_KEY, {
@@ -86,21 +87,21 @@ const loginUser = async (req, res) => {
         });
         trainer.token = tokenT;
         await trainer.save();
-
-        if (trainer && (await bcrypt.compare(password, trainer.password))) {
+        if (trainer && (isMatchT)) {
           req.session.userId = trainer._id;
           res.cookie("token", tokenT, { httpOnly: true, maxAge: 1000 * 60*60 });
           res.status(201).json({
             token: tokenT,
             Status: "You logined succesfully",
           });
-        } else res.status(500).send("Authorization error");
+        } else res.status(500).json({message : "Authorization error"});
         break;
       default:
         res.status(400).json({ message: "Invalid typeUser" });
         break;
     }
   } catch (error) {
+    
     res.status(500).send(error.message);
   }
 };

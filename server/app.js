@@ -6,6 +6,7 @@ const fs = require("fs").promises;
 
 const {registerRouter} = require("./controllers/registration/registerController")
 const {loginRouter} = require("./controllers/login/loginController");
+const {logoutRouter}= require("./controllers/logout/logoutController");
 const {mainRouter} = require("./controllers/main/index");
 
 //temp check
@@ -29,7 +30,7 @@ const logger = morgan("tiny", {
 });
 app.use(logger);
 
-app.use("/api", registerRouter,loginRouter)
+app.use("/api", registerRouter,loginRouter,logoutRouter)
 app.use("/api/main", mainRouter);
 
 

@@ -1,9 +1,9 @@
 const express = require("express");
 const mainRouter = express.Router();
+
 const { Sportsman, Trainer} = require("../../models/index");
 const {authenticateToken} = require("../login/loginController");
-
-
+const {profileRouter} = require("../main/profile/profileController")
 
 mainRouter.get("/",authenticateToken, async (req,res)=>{
     const token = req.cookies.token;
@@ -21,5 +21,7 @@ mainRouter.get("/",authenticateToken, async (req,res)=>{
       }
     }
 });
+
+mainRouter.use("/profile", authenticateToken, profileRouter)
 
 module.exports = {mainRouter};

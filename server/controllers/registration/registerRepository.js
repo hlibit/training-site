@@ -6,8 +6,8 @@ const registerUser =   async (req, res) => {
     const findErrors = validate(req.body);
     if (findErrors) return res.status(400).json({ findErrors });
     
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password,salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password,salt);
    
     try {
       switch (typeUser) {
