@@ -1,14 +1,6 @@
-POST /add 201 220 - 65.353 ms
-POST /add 201 220 - 56.846 ms
-POST /add 400 107 - 1.115 ms
-POST /add 400 107 - 3.940 ms
-POST /add 500 30 - 1.553 ms
-POST /add 201 220 - 56.011 ms
-POST /add 500 67 - 17.292 ms
-POST /add 201 243 - 56.450 ms
-POST /add 500 111 - 60.906 ms
-POST /add 201 240 - 43.102 ms
-POST /add 404 143 - 2.362 ms
-POST /add 400 43 - 4.094 ms
-POST /add/trn 201 148 - 62.754 ms
-POST /add/trn 400 51 - 3.658 ms
+
+POST /api/register 201 255 - 62.554 ms
+POST /api/register 201 255 - 42.355 ms
+POST /api/register 201 258 - 45.072 ms
+POST /api/register 201 312 - 125.377 ms
+POST /api/register 201 309 - 123.511 ms
