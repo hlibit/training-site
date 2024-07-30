@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const fs = require("fs").promises;
+const bodyParser = require("body-parser");
+const cors = require("cors")
 // const path = require("path");
 
 const {registerRouter} = require("./controllers/registration/registerController")
@@ -14,7 +16,8 @@ const { Training, validateTraining } = require("./models/index");
 
 
 app.use(express.json());
-
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(cors());
 //logger
 const logger = morgan("tiny", {
   stream: {

@@ -5,6 +5,6 @@ const {loginUser ,newSession,authenticateToken} = require("./loginRepository");
 
 loginRouter.use(cookieParser())
 loginRouter.use(newSession);
-loginRouter.get("/login", loginUser);
+loginRouter.post("/login", loginUser);
 
 module.exports = {loginRouter , authenticateToken};

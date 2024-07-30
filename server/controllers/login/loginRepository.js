@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
-const { Trainer, Sportsman, validate } = require("../../models/index");
+const { Trainer, Sportsman, validateAuth } = require("../../models/index");
 const { SECRET_KEY } = process.env;
 
 const newSession = session({
@@ -46,8 +46,8 @@ const authenticateToken = (req, res, next) => {
 
 const loginUser = async (req, res) => {
   const { email, password, typeUser } = req.body;
-  const findErrors = validate(req.body);
-  if (findErrors) return res.status(404).json({ findErrors });
+  const findErrors = validateAuth(req.body);
+  if (findErrors) return res.status(404).json({ findErrors});
   try {
     switch (typeUser) {
       case "Sportsman":
