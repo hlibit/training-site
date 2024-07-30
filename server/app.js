@@ -9,7 +9,7 @@ const cors = require("cors")
 const {registerRouter} = require("./controllers/registration/registerController")
 const {loginRouter} = require("./controllers/login/loginController");
 const {logoutRouter}= require("./controllers/logout/logoutController");
-const {mainRouter} = require("./controllers/main/index");
+const {mainRouter } = require("./controllers/main/index");
 
 //temp check
 const { Training, validateTraining } = require("./models/index");
@@ -17,7 +17,9 @@ const { Training, validateTraining } = require("./models/index");
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended:false}))
-app.use(cors());
+app.use(cors({origin: 'http://localhost:3000',
+  credentials: true,}));
+  
 //logger
 const logger = morgan("tiny", {
   stream: {
@@ -34,7 +36,7 @@ const logger = morgan("tiny", {
 app.use(logger);
 
 app.use("/api", registerRouter,loginRouter,logoutRouter)
-app.use("/api/main", mainRouter);
+app.use("/api/main",  mainRouter);
 
 
 //future add training module

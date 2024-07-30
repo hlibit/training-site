@@ -17,7 +17,9 @@ const authenticateToken = (req, res, next) => {
   const token = req.cookies.token;
 
   if (!req.session.userId) {
-    return res.status(401).send("Login first");
+    return res.status(401).json({
+      unLogged: true,
+    });
   }
 
   // if (!token) {
@@ -31,18 +33,23 @@ const authenticateToken = (req, res, next) => {
       if (sportsman) {
         sportsman.token = null;
         await sportsman.save();
-        res.status(403).send("U must be logged in");
+        return res.status(401).json({
+          unLogged: true,
+        });
       } else {
         const trainer = await Trainer.findById(req.session.userId);
         trainer.token = null;
         await trainer.save();
-        res.status(403).send("U must be logged in");
+        return res.status(401).json({
+          unLogged: true,
+        });
       }
     }
     req.user = user;
     next();
   });
 };
+
 
 const loginUser = async (req, res) => {
   const { email, password, typeUser } = req.body;
@@ -70,8 +77,7 @@ const loginUser = async (req, res) => {
             maxAge: 1000 * 60 * 60,
           });
           res.status(201).json({
-            token: token,
-            Status: "You logined succesfully",
+            Login: true
           });
         } else res.status(500).json({message : "Authorization error"});
         break;
@@ -91,8 +97,7 @@ const loginUser = async (req, res) => {
           req.session.userId = trainer._id;
           res.cookie("token", tokenT, { httpOnly: true, maxAge: 1000 * 60*60 });
           res.status(201).json({
-            token: tokenT,
-            Status: "You logined succesfully",
+            Login: true
           });
         } else res.status(500).json({message : "Authorization error"});
         break;

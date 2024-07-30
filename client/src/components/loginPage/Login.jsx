@@ -8,22 +8,19 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
       const response = await axios.post('http://localhost:3101/api/login', {
         email,
         password,
-        typeUser: "Sportsman"
+        typeUser: "Trainer"
       });
-
-      if (response.data.Status) {
+      if (response.data.Login) {
         navigate("/home");
-      } else {
-        console.log(response.data.message || "Login 1 failed. Please check your credentials and try again.");
-      }
+      } else navigate("/login");
     } catch (error) {
       const keys = Object.keys(error.response.data);
       const hasKey = keys.includes('findErrors');
