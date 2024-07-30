@@ -7,3 +7,14 @@ POST /api/login 404 51 - 37.139 ms
 POST /api/login 201 14 - 156.133 ms
 GET /api/main 304 - - 75.611 ms
 GET /api/main 401 17 - 8.092 ms
+GET /api/main 401 17 - 1.841 ms
+POST /api/login 201 14 - 180.646 ms
+GET /api/main 200 26 - 77.354 ms
+GET /api/main 401 17 - 114.317 ms
+POST /api/login 401 50 - 4.524 ms
+POST /api/login 401 50 - 1.204 ms
+POST /api/login 201 14 - 167.059 ms
+GET /api/main 304 - - 74.409 ms
+GET /api/main 304 - - 72.133 ms
+GET /api/main 304 - - 72.444 ms
+GET /api/main 401 50 - 0.940 ms

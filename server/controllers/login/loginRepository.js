@@ -19,6 +19,7 @@ const authenticateToken = (req, res, next) => {
   if (!req.session.userId) {
     return res.status(401).json({
       unLogged: true,
+      message: "Please, login first."
     });
   }
 
@@ -35,6 +36,7 @@ const authenticateToken = (req, res, next) => {
         await sportsman.save();
         return res.status(401).json({
           unLogged: true,
+          message: "Please, login again.Session expired."
         });
       } else {
         const trainer = await Trainer.findById(req.session.userId);
@@ -42,6 +44,7 @@ const authenticateToken = (req, res, next) => {
         await trainer.save();
         return res.status(401).json({
           unLogged: true,
+          message: "Please, login again.Session expired."
         });
       }
     }
