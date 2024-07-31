@@ -63,7 +63,7 @@ const loginUser = async (req, res) => {
       case "Sportsman":
         const sportsman = await Sportsman.findOne({ email });
         if (!sportsman)
-          return res.status(404).send(`User with ${email} [email] not found.`);
+          return res.status(404).send(`Sportsman with [email]: ${email} not found.`);
         const isMatch = await bcrypt.compare(password, sportsman.password);
         if (!isMatch) return res.status(404).send("Invalid password");
 
@@ -87,7 +87,7 @@ const loginUser = async (req, res) => {
       case "Trainer":
         const trainer = await Trainer.findOne({ email });
         if (!trainer)
-          return res.status(404).send(`User with ${email} [email] not found.`);
+          return res.status(404).send(`Trainer with [email]: ${email} not found.`);
         const isMatchT = await bcrypt.compare(password, trainer.password);
         if (!isMatchT) return res.status(404).send("Invalid password");
 
