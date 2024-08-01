@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
   Link,
-  Grid,
   Typography,
   Container,
   Select,
@@ -17,7 +15,7 @@ import {
   Box,
 } from "@mui/material";
 import Footer from "../partials/footer/Footer";
-import Header from "../partials/header/Header";
+import Header from "../partials/header/Headerr";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -140,7 +138,7 @@ export default function LoginPage() {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
-                <Link href="#" variant="body1">
+                <Link href="/register" variant="body1">
                   {"Don't have an account? Sign Up"}
                 </Link>
           </Box>
