@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import FitnessCenterRoundedIcon from '@mui/icons-material/FitnessCenterRounded';
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Select from "@mui/material/Select";
-import MenuItem  from "@mui/material/MenuItem";
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Typography,
+  Container,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Box,
+} from "@mui/material";
+import Footer from "../partials/footer/Footer";
+import Header from "../partials/header/Header";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -49,49 +52,79 @@ export default function LoginPage() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
+    >
+      
       <CssBaseline />
-      <Box
+      <Header />
+     
+      <Container
+        component="main"
+        maxWidth="xs"
         sx={{
-          marginTop: 8,
+          flex: "1 0 auto",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "black" }}>
-          <FitnessCenterRoundedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <Box sx={{ color: "red" ,}}>{error}</Box>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            value={email}
-            autoComplete="email"
-            autoFocus
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <FormControl fullWidth margin="normal">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            {error && (
+              <Box
+                sx={{
+                  textAlign:"center",
+                  color: "red",
+                  p: 1,
+                  border: 0.5,
+                  borderColor: "red",
+                  borderRadius: 2,
+                }}
+              >
+               Error: {error}
+              </Box>
+            )}
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              value={email}
+              autoComplete="email"
+              autoFocus
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              value={password}
+              autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormControl fullWidth margin="normal">
               <InputLabel id="typeUser-label">Select your role</InputLabel>
               <Select
                 labelId="typeUser-label"
@@ -104,28 +137,16 @@ export default function LoginPage() {
                 <MenuItem value={"Trainer"}>Trainer</MenuItem>
               </Select>
             </FormControl>
-          <Button
-            type="submit"
-            fullWidth
-            variant= "contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            {/* <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid> */}
-            <Grid item>
-              <Link href="#" variant="body1">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              Sign In
+            </Button>
+                <Link href="#" variant="body1">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+          </Box>
         </Box>
-      </Box>
+      </Container>
+      <Footer />
     </Container>
   );
 }
