@@ -17,7 +17,7 @@ import {
 import Footer from "../partials/footer/Footer";
 import Header from "../partials/header/Headerr";
 
-export default function LoginPage() {
+export default function LoginPage({toggleTheme}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [typeUser, setTypeUser] = useState("Sportsman");
@@ -69,6 +69,7 @@ export default function LoginPage() {
         sx={{
           flex: "1 0 auto",
           display: "flex",
+         
           flexDirection: "column",
           justifyContent: "center",
         }}

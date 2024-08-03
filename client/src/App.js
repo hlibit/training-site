@@ -3,10 +3,14 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import axios from 'axios';
 import LoginPage from './components/loginPage/Login';
 import Register from './components/registerPage/Register';
+import { ThemeProvider ,useTheme} from "@mui/material/styles";
+
 import './App.css';
 
 function App() {
+  const theme = useTheme();
   return (
+    <ThemeProvider theme={theme}>
     <div className="App">
       <Router>
         <Routes>
@@ -17,6 +21,7 @@ function App() {
         </Routes>
       </Router>
     </div>
+    </ThemeProvider>
   );
 }
 

@@ -1,5 +1,8 @@
 .App {
-  font-family: sans-serif;
   color: #616161;
+}
+
+button span {
+display: none;
 }
 
