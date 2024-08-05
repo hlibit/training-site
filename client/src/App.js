@@ -3,15 +3,18 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import axios from 'axios';
 import LoginPage from './components/loginPage/Login';
 import Register from './components/registerPage/Register';
-import { ThemeProvider ,useTheme} from "@mui/material/styles";
-
+import { ThemeProvider } from './components/theme/themeContext';
+import { CssBaseline } from '@mui/material';
+import Header from './components/partials/header/Headerr';
 import './App.css';
 
 function App() {
-  const theme = useTheme();
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
+    <CssBaseline />
     <div className="App">
+    
       <Router>
         <Routes>
           <Route path="/home" element={<HomePage />} />
@@ -49,8 +52,9 @@ function HomePage() {
 
   return (
     <div>
+      <Header />
       <h2>Home Page</h2>
-      <h3>{greetings}</h3> {/* Отображение состояния */}
+      <h3>{greetings}</h3> 
     </div>
   );
 }

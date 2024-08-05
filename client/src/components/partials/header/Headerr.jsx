@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from "react";
 import { Box, Typography, Avatar, Button, Link } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
-import { lightTheme, darkTheme } from "../../theme/theme";
+import { useTheme } from "../../theme/themeContext";
 
 export default function Header() {
   const location = useLocation();
   const getPath = () => {
     return location.pathname;
   };
-  const [theme, setTheme] = useState(lightTheme);
-  const toggleTheme = () => {
-    setTheme((prevTheme) =>
-      prevTheme.palette.mode === "light" ? darkTheme : lightTheme
-    );
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <Box
+      component="header"
       sx={{
-        
         borderBottom: 0.5,
         borderBottomColor: theme.palette.primary.border,
         py: 0.5,
@@ -48,11 +42,14 @@ export default function Header() {
             border: 0.5,
             borderColor: theme.palette.primary.main,
             borderRadius: "30px",
+            ":hover": {
+              borderColor: "#91d9ff",
+            },
             p: 1,
           }}
           onClick={toggleTheme}
         >
-          {theme == lightTheme ? (
+          {theme.palette.mode === "light" ? (
             <LightModeIcon sx={{ color: "black" }} />
           ) : (
             <ModeNightIcon sx={{ color: "white" }} />

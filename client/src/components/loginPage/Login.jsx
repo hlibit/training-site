@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+
 import {
   Button,
   CssBaseline,
@@ -17,12 +19,13 @@ import {
 import Footer from "../partials/footer/Footer";
 import Header from "../partials/header/Headerr";
 
-export default function LoginPage({toggleTheme}) {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [typeUser, setTypeUser] = useState("Sportsman");
   const [error, setError] = useState("");
 
+  const theme = useTheme();
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -56,21 +59,22 @@ export default function LoginPage({toggleTheme}) {
       sx={{
         display: "flex",
         flexDirection: "column",
+        backgroundColor: theme.palette.secondary.main,
         height: "100vh",
       }}
     >
-      
       <CssBaseline />
       <Header />
-     
       <Container
+        disableGutters
         component="main"
-        maxWidth="xs"
+        maxWidth="sm"
         sx={{
           flex: "1 0 auto",
           display: "flex",
-         
           flexDirection: "column",
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.primary.main,
           justifyContent: "center",
         }}
       >
@@ -84,11 +88,16 @@ export default function LoginPage({toggleTheme}) {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             {error && (
               <Box
                 sx={{
-                  textAlign:"center",
+                  textAlign: "center",
                   color: "red",
                   p: 1,
                   border: 0.5,
@@ -96,7 +105,7 @@ export default function LoginPage({toggleTheme}) {
                   borderRadius: 2,
                 }}
               >
-               Error: {error}
+                Error: {error}
               </Box>
             )}
             <TextField
@@ -136,12 +145,24 @@ export default function LoginPage({toggleTheme}) {
                 <MenuItem value={"Trainer"}>Trainer</MenuItem>
               </Select>
             </FormControl>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 3,
+                mb: 2,
+                ":hover": {
+                  backgroundColor: () =>
+                    theme.palette.mode === "light" ? "#313131" : "#b5b5b5",
+                },
+              }}
+            >
               Sign In
             </Button>
-                <Link href="/register" variant="body1">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+            <Link href="/register" variant="body1">
+              {"Don't have an account? Sign Up"}
+            </Link>
           </Box>
         </Box>
       </Container>
