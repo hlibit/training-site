@@ -1,16 +1,26 @@
-import React, { createContext, useState, useMemo, useContext } from "react";
+import React, { createContext, useState, useEffect, useMemo, useContext } from "react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import { lightTheme, darkTheme } from "./theme";
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(lightTheme);
+  const savedTheme = localStorage.getItem('theme') === 'dark' ? darkTheme : lightTheme;
+  const [theme, setTheme] = useState(savedTheme);
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      setTheme(storedTheme === 'dark' ? darkTheme : lightTheme);
+    }
+  }, []);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) =>
-      prevTheme.palette.mode === "light" ? darkTheme : lightTheme
-    );
+    setTheme(prevTheme => {
+      const newTheme = prevTheme.palette.mode === 'light' ? darkTheme : lightTheme;
+      localStorage.setItem('theme', newTheme.palette.mode);
+      return newTheme;
+    });
   };
 
   const value = useMemo(

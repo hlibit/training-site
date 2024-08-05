@@ -37,7 +37,7 @@ export default function LoginPage() {
         password,
         typeUser,
       });
-      if (response.data.Login) {
+      if (response.data.Login ) {
         navigate("/home");
       } else navigate("/login");
     } catch (error) {

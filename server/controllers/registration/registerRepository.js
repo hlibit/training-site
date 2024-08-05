@@ -23,11 +23,11 @@ const registerUser =   async (req, res) => {
             trainers: [],
             trainings: []
           });
+          
           await sportsman.save();
           res.status(201).json({
-            message: "sportsman created",
-            data: sportsman,
-          });
+            isCreated: true,
+           });
           break;
         }
         case "Trainer": {
@@ -44,8 +44,7 @@ const registerUser =   async (req, res) => {
           });
           await trainer.save();
           res.status(201).json({
-            message: "trainer created",
-            data: trainer,
+           isCreated: true,
           });
           break;
         }

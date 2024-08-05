@@ -1,4 +1,4 @@
-import { Box, Typography, Avatar, Button, Link } from "@mui/material";
+import { Box, Avatar, Button, Link } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
 import LightModeIcon from "@mui/icons-material/LightMode";
@@ -66,7 +66,7 @@ export default function Header() {
               underline="none"
               sx={{ color: theme.palette.secondary.main, p: 1, m: 0 }}
             >
-              Register
+              Sign Up
             </Link>
           </Button>
         ) : (

@@ -13,6 +13,7 @@ const newSession = session({
   },
 });
 
+//authentification middleware
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.token;
 
@@ -22,12 +23,9 @@ const authenticateToken = (req, res, next) => {
       message: "Please, login first."
     });
   }
-
   // if (!token) {
   //   return res.status(401).send("No token provided");
   // }
-  //maynbe session destroy add
-
   jwt.verify(token, SECRET_KEY, async (err, user) => {
     if (err) {
       const sportsman = await Sportsman.findById(req.session.userId);
