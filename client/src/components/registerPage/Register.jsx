@@ -45,7 +45,7 @@ try {
     password,
     typeUser,
   })
-  if(response.data.isCreated) return navigate("/home") 
+  if(response.data.isCreated) return navigate("/main") 
     else{
     setError("Undefined error...")
   } 

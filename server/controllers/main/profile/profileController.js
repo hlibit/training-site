@@ -4,6 +4,6 @@ const {authenticateToken} = require("../../login/loginController")
 const {profileGet,profileEdit} = require("./profileRepository");
 
 profileRouter.get("/", authenticateToken, profileGet);
-profileRouter.patch("/edit", authenticateToken,profileEdit );
+profileRouter.post("/edit", authenticateToken,profileEdit ); //was PAtch method
 
 module.exports = {profileRouter};

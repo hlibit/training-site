@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
@@ -29,6 +29,17 @@ export default function LoginPage() {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
+  useEffect(() =>{
+    const handleLoadPage = async () =>{
+      try {
+        await axios.get("http://localhost:3101/api/main")
+      } catch (error) {
+        setError(error.response.data.message);
+      }
+    }
+    handleLoadPage();
+  },[])
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -38,13 +49,13 @@ export default function LoginPage() {
         typeUser,
       });
       if (response.data.Login ) {
-        navigate("/home");
+        navigate("/main");
       } else navigate("/login");
     } catch (error) {
       const keys = Object.keys(error.response.data);
       const hasKey = keys.includes("findErrors");
       if (!hasKey) {
-        setError(error.response.data);
+        setError(error.response.data.message);
       } else {
         const errorMessages = error.response.data.findErrors.map((err) => err);
         setError(errorMessages);

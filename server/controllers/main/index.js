@@ -14,14 +14,14 @@ mainRouter.get("/", authenticateToken, async (req, res) => {
 
       if (sportsman) {
         res.status(200).json({
-          message: `Hello, ${sportsman.name}`,
+          message: sportsman.name,
         });
       } else {
         const trainer = await Trainer.findOne({ token: token });
 
         if (trainer) {
           res.status(200).json({
-            message: `Hello, ${trainer.name}`,
+            message: trainer.name,
           });
         } else {
           res.status(404).json({

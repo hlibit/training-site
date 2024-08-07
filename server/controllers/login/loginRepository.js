@@ -19,8 +19,7 @@ const authenticateToken = (req, res, next) => {
 
   if (!req.session.userId) {
     return res.status(401).json({
-      unLogged: true,
-      message: "Please, login first."
+      unLogged: true,signin
     });
   }
   // if (!token) {
@@ -34,7 +33,7 @@ const authenticateToken = (req, res, next) => {
         await sportsman.save();
         return res.status(401).json({
           unLogged: true,
-          message: "Please, login again.Session expired."
+          error: "Please, sign in. Session expired."
         });
       } else {
         const trainer = await Trainer.findById(req.session.userId);
@@ -42,7 +41,7 @@ const authenticateToken = (req, res, next) => {
         await trainer.save();
         return res.status(401).json({
           unLogged: true,
-          message: "Please, login again.Session expired."
+          message: "Please, sign in. Session expired."
         });
       }
     }
@@ -61,9 +60,9 @@ const loginUser = async (req, res) => {
       case "Sportsman":
         const sportsman = await Sportsman.findOne({ email });
         if (!sportsman)
-          return res.status(404).send(`Sportsman with [email]: ${email} not found.`);
+          return res.status(404).json({ message: `Sportsman with [email]: ${email} not found.`});
         const isMatch = await bcrypt.compare(password, sportsman.password);
-        if (!isMatch) return res.status(404).send("Invalid password");
+        if (!isMatch) return res.status(404).json({message: "Invalid password"});
 
         const token = jwt.sign({ id: sportsman._id }, SECRET_KEY, {
           expiresIn: "1h",
@@ -85,9 +84,9 @@ const loginUser = async (req, res) => {
       case "Trainer":
         const trainer = await Trainer.findOne({ email });
         if (!trainer)
-          return res.status(404).send(`Trainer with [email]: ${email} not found.`);
+          return res.status(404).json({ message: `Trainer with [email]: ${email} not found.`});
         const isMatchT = await bcrypt.compare(password, trainer.password);
-        if (!isMatchT) return res.status(404).send("Invalid password");
+        if (!isMatchT) return res.status(404).json({message: "Invalid password"});
 
         const tokenT = jwt.sign({ id: trainer._id }, SECRET_KEY, {
           expiresIn: "1h",
