@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../partials/header/Headerr";
 import Footer from "../partials/footer/Footer";
-import { Container,Box } from "@mui/material";
+import { Container, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
+import Sidebar from "../partials/sidebar/Sidebar";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -31,52 +31,42 @@ export default function MainPage() {
     enterFunc();
   }, [navigate]);
 
-
   return (
-    <Container 
-    disableGutters
-    maxWidth={false}
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      color: theme.palette.primary.main,
-      backgroundColor: theme.palette.secondary.main,
-      height: "100vh",
-    }}>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.secondary.main,
+        height: "100vh",
+      }}
+    >
       <Header />
-      <Box 
-      component="main"
+      <Box
+        component="main"
         sx={{
           flex: "1 0 auto",
           display: "flex",
           flexDirection: "row",
-          flexWrap:"nowrap",
+          flexWrap: "nowrap",
           alignItems: "center",
-          gap:5,
+          gap: 5,
           textAlign: "center",
         }}
       >
+        <Sidebar />
         <Box
-        component="aside"
-        sx={{
-          borderRight:1,
-          borderRightColor: theme.palette.primary.border,
-          minWidth:300,
-          width: "30%",
-          height: "100%",
-         
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+          }}
         >
-
-        </Box>
-        <Box sx={{
-          display :"flex",
-          flexDirection:"column",
-          alignItems: "center",
-          width: "100%",
-        }}>
-        <h1>Achive your goals now. Upgrade yourself.</h1>
-        <h3 style={{color:"gray"}}>Welcome, {name} !</h3>
+          <h1>Achive your goals now. Upgrade yourself.</h1>
+          <h3 style={{ color: "gray" }}>Welcome, {name} !</h3>
         </Box>
       </Box>
       <Footer />

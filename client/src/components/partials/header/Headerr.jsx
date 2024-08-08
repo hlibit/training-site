@@ -1,11 +1,12 @@
 import { Box, Avatar, Button, Link } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import { useTheme } from "../../theme/themeContext";
 
 export default function Header() {
+  const navigate = useNavigate();
   const location = useLocation();
   const getPath = () => {
     return location.pathname;
@@ -33,7 +34,7 @@ export default function Header() {
           color: theme.palette.secondary.main,
         }}
       >
-        <FitnessCenterRoundedIcon />
+        <FitnessCenterRoundedIcon onClick={()=>navigate("/main")} sx={{cursor:"pointer"}}/>
       </Avatar>
       <Box sx={{ ml: "auto", display: "flex", alignItems: "center", gap: 1.5 }}>
         <Button
@@ -55,7 +56,7 @@ export default function Header() {
             <ModeNightIcon sx={{ color: "white" }} />
           )}
         </Button>
-        {getPath() === "/login" ? (
+        {getPath() ==="/login" || getPath() ==="/register" ?  getPath() === "/login" ? (
           <Button
             variant="contained"
             sx={{ m: 1.5, p: 0.3, backgroundColor: theme.palette.primary.main }}
@@ -80,7 +81,8 @@ export default function Header() {
               Login
             </Link>
           </Button>
-        )}
+        ) : null}
+        
       </Box>
     </Box>
   );

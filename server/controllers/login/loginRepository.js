@@ -9,7 +9,7 @@ const newSession = session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 12,
+    maxAge: 1000 * 60 * 60 * 2,
   },
 });
 
@@ -19,7 +19,7 @@ const authenticateToken = (req, res, next) => {
 
   if (!req.session.userId) {
     return res.status(401).json({
-      unLogged: true,signin
+      unLogged: true,
     });
   }
   // if (!token) {
