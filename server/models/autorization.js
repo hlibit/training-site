@@ -49,6 +49,7 @@ const userValidationSchema = Joi.object({
         "any.required": `"sports" is required`
     }),
 });
+
 //edit profile
 const editValidationSchema = Joi.object({
     name: Joi.string().required().min(4).max(30).messages({
@@ -116,7 +117,7 @@ const trainingValidaionSchema = Joi.object({
 
 })
 
-//AUTHORISE SCHEMA
+//login SCHEMA
 const authSchema = Joi.object({
     email: Joi.string().required().min(6).max(255).email().messages({
         "string.base": `"email" should be a string`,
@@ -140,6 +141,18 @@ const authSchema = Joi.object({
         "any.required": `"sports" is required`
     }),
 });
+
+//new password schema
+
+const newPassSchema = Joi.object({
+    password: Joi.string().required().min(6).max(255).messages({
+        "string.base": `"password" should be a string`,
+        "string.empty": `"password" must not be empty`,
+        "string.min": `"password" must contain at least {#limit} characters`,
+        "string.max": `"password" must contain at most {#limit} characters`,
+        "any.required": `"password" is required`
+    })
+})
 
 const validateAuth =  (user) =>{
     const result = authSchema.validate(user);
@@ -165,4 +178,11 @@ const validateEditedUser = (user) =>{
     return null;
 }
 
-module.exports = {validate ,validateTraining, validateAuth,validateEditedUser};
+const validateNewPassword= (pass) =>{
+    const result = newPassSchema.validate(pass);
+    if (result.error) return result.error.details.map((detail) => detail.message );
+    return null;
+}
+
+
+module.exports = {validate ,validateTraining, validateAuth,validateEditedUser,validateNewPassword};

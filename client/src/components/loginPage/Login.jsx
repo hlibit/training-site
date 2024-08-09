@@ -29,16 +29,26 @@ export default function LoginPage() {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
-  useEffect(() =>{
-    const handleLoadPage = async () =>{
+  useEffect(() => {
+    const handleLoadPage = async () => {
       try {
-        await axios.get("http://localhost:3101/api/main")
+        await axios.get("http://localhost:3101/api/main");
       } catch (error) {
         setError(error.response.data.message);
       }
-    }
+    };
     handleLoadPage();
-  },[])
+  }, []);
+
+  useEffect(() => {
+    if (error !== "") {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,7 +58,7 @@ export default function LoginPage() {
         password,
         typeUser,
       });
-      if (response.data.Login ) {
+      if (response.data.Login) {
         navigate("/main");
       } else navigate("/login");
     } catch (error) {

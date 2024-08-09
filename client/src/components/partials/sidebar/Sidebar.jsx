@@ -9,6 +9,7 @@ import {
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import HistoryIcon from "@mui/icons-material/History";
+import SecurityIcon from '@mui/icons-material/Security';
 import { useTheme } from "@mui/material/styles";
 import { useNavigate,useLocation } from "react-router-dom";
 
@@ -44,6 +45,17 @@ export default function Sidebar() {
               />
             </ListItemIcon>
             <ListItemText primary="Profile" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{backgroundColor: getPath() === "/main/security" ? theme.palette.primary.li: "inherit"}} onClick={()=>navigate("/main/security")}>
+            <ListItemIcon >
+              <SecurityIcon
+              sx={{color: theme.palette.primary.main}}
+                fontSize="large"
+              />
+            </ListItemIcon>
+            <ListItemText primary="Security" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>

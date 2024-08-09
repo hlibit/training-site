@@ -1,9 +1,9 @@
 const express = require("express");
 const profileRouter = express.Router();
-const {authenticateToken} = require("../../login/loginController")
 const {profileGet,profileEdit} = require("./profileRepository");
-
-profileRouter.get("/", authenticateToken, profileGet);
-profileRouter.post("/edit", authenticateToken,profileEdit ); //was PAtch method
+const {changePassRouter} = require("../changePassword/changePassController")
+profileRouter.get("/",  profileGet);
+profileRouter.post("/edit", profileEdit ); //was PAtch method
+profileRouter.use("/changePassword",changePassRouter)
 
 module.exports = {profileRouter};

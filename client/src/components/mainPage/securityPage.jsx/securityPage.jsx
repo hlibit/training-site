@@ -3,27 +3,15 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../../partials/header/Headerr";
 import Footer from "../../partials/footer/Footer";
-import {
-  Container,
-  Box,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-} from "@mui/material";
+import { Container, Box, Button, TextField } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Sidebar from "../../partials/sidebar/Sidebar";
 
-export default function ProfilePage() {
+export default function Security() {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [age, setAge] = useState();
-  const [sports, setSports] = useState("Fitness");
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repPassword, setRepPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
@@ -31,17 +19,9 @@ export default function ProfilePage() {
   useEffect(() => {
     const enterFunc = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3101/api/main/profile",
-          {
-            withCredentials: true,
-          }
-        );
-        setName(response.data.data.name);
-        setSurname(response.data.data.surname);
-        setAge(response.data.data.age);
-        setSports(response.data.data.sports);
-        setEmail(response.data.data.email);
+        await axios.get("http://localhost:3101/api/main", {
+          withCredentials: true,
+        });
       } catch (error) {
         if (error.response && error.response.data.unLogged) {
           navigate("/login");
@@ -54,26 +34,47 @@ export default function ProfilePage() {
     enterFunc();
   }, [navigate]);
 
-  const handleEditSubmit = async (event) => {
+  //logout
+  const logoutHandler = async () => {
+    try {
+       const response = await axios.post("http://localhost:3101/api/logout",
+            {
+              withCredentials: true,
+            })
+            if(response.status === 200){
+                alert(response.data.message);
+                navigate("/login")
+            }
+    } catch (error) {
+        setError("Something went wrong...")
+    }
+  };
+
+  //change password
+  const handleChangePasswordSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3101/api/main/profile/edit",
-        {
-          name,
-          surname,
-          age,
-          sports,
-          email,
-        },
-        {
-          withCredentials: true,
+      if (password === repPassword) {
+        const response = await axios.post(
+          "http://localhost:3101/api/main/profile/changePassword",
+          {
+            password,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        setMessage(response.data.message);
+        if (response.status === 200){
+          navigate("/main/security")
+          setPassword("")
+          setRepPassword("")
         }
-      );
-      setMessage(response.data.message);
-      if (response.data.isEdited) return navigate("/main/profile");
-      else {
-        setError("Something went wrong.");
+        else {
+          setError("Something went wrong.");
+        }
+      } else {
+        setError("Passwords doesn't match");
       }
     } catch (error) {
       console.log(error);
@@ -90,14 +91,15 @@ export default function ProfilePage() {
 
   //timer showing update
   useEffect(() => {
-    if (message === "Your profile is updated!") {
+    if (message !== "" || error !== "") {
       const timer = setTimeout(() => {
         setMessage("");
-      }, 4000);
+        setError("")
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [message]);
+  }, [message,error]);
 
   return (
     <Container
@@ -148,14 +150,11 @@ export default function ProfilePage() {
                 pt: 1,
               }}
             >
-              <h2 style={{ padding: 0, margin: 0 }}>Your profile</h2>
-              <p style={{ color: "gray", padding: 0, margin: "5px" }}>
-                Change information about yourself
-              </p>
+              <h2 style={{ padding: 0, margin: 0 }}>Change your password</h2>
             </Box>
             <Box
               component="form"
-              onSubmit={handleEditSubmit}
+              onSubmit={handleChangePasswordSubmit}
               noValidate
               sx={{ mt: 1 }}
             >
@@ -191,67 +190,24 @@ export default function ProfilePage() {
                 margin="normal"
                 required
                 fullWidth
-                id="name"
-                name="name"
-                value={name}
-                autoComplete="name"
-                label="Change your Name"
-                onChange={(e) => setName(e.target.value)}
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                label="Create Password"
+                onChange={(e) => setPassword(e.target.value)}
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="surname"
-                label="Change your Surname"
-                name="surname"
-                value={surname}
-                autoComplete="surname"
-                onChange={(e) => setSurname(e.target.value)}
+                id="repPassword"
+                name="repPassword"
+                type="password"
+                value={repPassword}
+                label="Repeat password"
+                onChange={(e) => setRepPassword(e.target.value)}
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="age"
-                type="number"
-                label="Age"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                name="age"
-                value={age}
-                autoComplete="age"
-                onChange={(e) => setAge(e.target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Change Email Address"
-                name="email"
-                value={email}
-                autoComplete="email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <FormControl fullWidth margin="normal">
-                <InputLabel id="sports-label">Select your Sport</InputLabel>
-                <Select
-                  labelId="sports-label"
-                  id="sports"
-                  value={sports}
-                  label="Select your Sport"
-                  onChange={(e) => setSports(e.target.value)}
-                >
-                  <MenuItem value={"Power-Lifting"}>Power-Lifting</MenuItem>
-                  <MenuItem value={"Swimming"}>Swimming</MenuItem>
-                  <MenuItem value={"Running"}>Running</MenuItem>
-                  <MenuItem value={"Fitness"}>Fitness</MenuItem>
-                  <MenuItem value={"Boxing"}>Boxing</MenuItem>
-                  <MenuItem value={"Cross-Fit"}>Cross-Fit</MenuItem>
-                </Select>
-              </FormControl>
               <Button
                 type="submit"
                 fullWidth
@@ -265,10 +221,25 @@ export default function ProfilePage() {
                   },
                 }}
               >
-                Save changes
+                Save Password
               </Button>
             </Box>
           </Box>
+          <Button
+            variant="outlined"
+            onClick={() => logoutHandler()}
+            sx={{
+              mt: 10,
+              px: 4,
+              py: 2.5,
+              borderColor: "#c50101",
+              ":hover": {
+                bgColor: "#ef0409",
+              },
+            }}
+          >
+            LOGOUT
+          </Button>
         </Box>
       </Box>
       <Footer />
