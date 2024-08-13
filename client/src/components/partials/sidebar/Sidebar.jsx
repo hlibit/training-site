@@ -126,7 +126,7 @@ export default function Sidebar() {
           </ListItem>
         ) : (
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={()=> navigate("/main/find-training")}>
               <ListItemIcon>
                 <ListAltOutlinedIcon
                   sx={{ color: theme.palette.primary.main }}
