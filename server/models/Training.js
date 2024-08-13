@@ -18,9 +18,9 @@ const TrainingSchema = new Schema(
       type: String,
       required: true,
       enum: [
-        "light",
-        "medium",
-        "hard",
+        "Light",
+        "Medium",
+        "Hard",
       ],
     },
     energy: {
@@ -30,6 +30,14 @@ const TrainingSchema = new Schema(
     duration: {
       type: Number,
       required: true,
+    },
+    status:{
+      type: String,
+      required: true,
+      enum:[
+        "Pending",
+        "Finished"
+      ]
     },
 
     sportsmen: [{ type: Schema.Types.ObjectId, ref: "Sportsman" }],

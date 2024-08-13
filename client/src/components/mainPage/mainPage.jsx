@@ -10,6 +10,7 @@ import Sidebar from "../partials/sidebar/Sidebar";
 export default function MainPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [loading,setLoading] = useState(true);
   const theme = useTheme();
 
   useEffect(() => {
@@ -25,12 +26,29 @@ export default function MainPage() {
         } else {
           console.error(error);
         }
+      } finally{
+        setLoading(false)
       }
     };
 
     enterFunc();
   }, [navigate]);
 
+
+  if(loading){
+    return <Box
+      component="main"
+        sx={{
+          flex: "1 0 auto",
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "nowrap",
+          alignItems: "center",
+          gap: 5,
+          textAlign: "center",
+        }}>
+    </Box>
+  }
   return (
     <Container
       disableGutters

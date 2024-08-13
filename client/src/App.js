@@ -7,6 +7,7 @@ import "./App.css";
 import MainPage from "./components/mainPage/mainPage";
 import ProfilePage from "./components/mainPage/profilePage/profilePage";
 import Security from "./components/mainPage/securityPage.jsx/securityPage";
+import CreateTraining from "./components/mainPage/createTraining/createTraining";
 
 function NotFound() {
   return <h2>Not Found</h2>;
@@ -22,6 +23,7 @@ function App() {
             <Route path="/main" element={<MainPage />} />
             <Route path="/main/profile" element={<ProfilePage />} />
             <Route path="/main/security" element={<Security />} />
+            <Route path="/main/create" element={<CreateTraining />} />
             <Route exact path="/register" element={<Register />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<NotFound />} />

@@ -96,10 +96,10 @@ const trainingValidaionSchema = Joi.object({
         "any.only": `"sports" must be one of [Power-Lifting, Swimming, Fitness, Running, Boxing, Cross-Fit]`,
         "any.required": `"sports" is required`
     }),
-    level: Joi.string().required().valid('light', 'medium', 'hard').messages({
+    level: Joi.string().required().valid('Light', 'Medium', 'Hard').messages({
         "string.base": `"level" should be a string`,
         "string.empty": `"level" must not be empty`,
-        "any.only": `"level" must be one of [light, medium, hard]`,
+        "any.only": `"level" must be one of [Light, Medium, Hard]`,
         "any.required": `"level" is required`
     }),
     energy: Joi.number().required().min(300).max(800).messages({
@@ -114,7 +114,12 @@ const trainingValidaionSchema = Joi.object({
         "number.max": `"duration" must be at most {#limit}`,
         "any.required": `"duration" is required`
     }),
-
+    status: Joi.string().required().valid('Pending', 'Finished').messages({
+        "string.base": `"status" should be a string`,
+        "string.empty": `"status" must not be empty`,
+        "any.only": `"status" must be one of [Pending, Finished]`,
+        "any.required": `"status" is required`
+    }),
 })
 
 //login SCHEMA
