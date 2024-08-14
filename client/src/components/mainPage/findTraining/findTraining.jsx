@@ -22,6 +22,7 @@ import { ChangeIcon } from "./changeIcon";
 export default function FindTraining() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [message, setMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [trainingParam, setTrainingParam] = useState("");
   const [userTrainings, setUserTrainings] = useState([]);
@@ -64,6 +65,38 @@ export default function FindTraining() {
     };
     GetTrainings();
   }, []);
+
+  const handleAddSportsmanTraining = async (id) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3101/api/main/training/addTraining",
+        {
+          trainingId: id,
+        },
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        const updatedTrainings = filteredTrainings.filter(
+          (training) => training._id !== id
+        );
+        setMessage(response.data.message);
+        setFilteredTrainings(updatedTrainings);
+      } 
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //timer showing update
+  useEffect(() => {
+    if (message === "Challenge Accepted") {
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleSearchQueryChange = (e) => {
     const query = e.target.value;
@@ -136,6 +169,20 @@ export default function FindTraining() {
             }}
           >
             <h2 style={{ padding: 0, margin: 0 }}>Find. Your. Challenge.</h2>
+            {message && (
+              <Box
+                sx={{
+                  textAlign: "center",
+                  color: "greean",
+                  p: 1,
+                  border: 0.5,
+                  borderColor: "green",
+                  borderRadius: 2,
+                }}
+              >
+                {message}
+              </Box>
+            )}
             <Box
               sx={{
                 display: "flex",
@@ -251,6 +298,7 @@ export default function FindTraining() {
                   <Button
                     type="submit"
                     variant="contained"
+                    onClick={() => handleAddSportsmanTraining(t._id)}
                     sx={{
                       my: 1,
                       ":hover": {

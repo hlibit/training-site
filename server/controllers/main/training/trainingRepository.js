@@ -16,7 +16,6 @@ const CreateTraining = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const userId = decoded.id;
-    console.log(decoded);
     const trainer = await Trainer.findById(userId);
     if (!trainer) {
       return res.status(404).json({ message: "Trainer not found" });
@@ -42,17 +41,50 @@ const CreateTraining = async (req, res) => {
 };
 
 const GetTrainings = async (req, res) => {
-  // const token = req.cookies.token;
-  // const decoded = jwt.verify(token, process.env.SECRET_KEY);
-  // const userId = decoded.id;
-
+  const token = req.cookies.token;
   try {
-   const trainings =  await Training.find().populate("trainers");
-   res.status(200).json(trainings);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const userId = decoded.id;
+    const sportsman = await Sportsman.findById(userId).populate("trainings");
+
+    if (sportsman) {
+      const filteredTrainings = [];
+      const trainings = await Training.find().populate("trainers");
+
+      trainings.forEach((t) => {
+        const isAlreadyTaken = sportsman.trainings.some(
+          (userTraining) => userTraining._id.toString() === t._id.toString()
+        );
+
+        if (!isAlreadyTaken) {
+          filteredTrainings.push(t);
+        }
+      });
+
+      res.status(200).json(filteredTrainings);
+    }
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
-
 };
 
-module.exports = { CreateTraining, GetTrainings };
+const AddSportsmanTraining = async (req, res) => {
+  const { trainingId } = req.body;
+  const token = req.cookies.token;
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const userId = decoded.id;
+    const sportsman = await Sportsman.findById(userId);
+    if (sportsman) {
+      sportsman.trainings.push(trainingId);
+      await sportsman.save();
+      res.status(200).json({
+        message: "Challenge Accepted",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { CreateTraining, GetTrainings, AddSportsmanTraining };
