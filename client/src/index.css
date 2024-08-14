@@ -10,3 +10,6 @@ code {
     monospace;
 }
 
+p {
+  margin: 6px;
+}

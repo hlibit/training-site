@@ -51,7 +51,7 @@ export default function Sidebar() {
           borderRightColor: theme.palette.primary.border,
           minWidth: 300,
           width: "26%",
-          height: "100%",
+          height:"100%",
         }}
       >
       </Box>
@@ -66,14 +66,14 @@ export default function Sidebar() {
         borderRightColor: theme.palette.primary.border,
         minWidth: 300,
         width: "26%",
-        height: "100%",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         gap: 4,
         alignItems: "center",
       }}
     >
-      <List sx={{ m: 0, p: 0, width: "100%" }}>
+      <List sx={{ m: 0, p: 0, width: "100%",position:"sticky"}}>
         <ListItem disablePadding>
           <ListItemButton
             sx={{
