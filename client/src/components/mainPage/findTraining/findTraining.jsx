@@ -6,28 +6,27 @@ import Footer from "../../partials/footer/Footer";
 import { useTheme } from "@mui/material/styles";
 import Sidebar from "../../partials/sidebar/Sidebar";
 import {
-  Button,
   TextField,
   Container,
   Select,
   MenuItem,
+  Slider,
   InputLabel,
   FormControl,
+  Button,
   Box,
 } from "@mui/material";
-import SportsMmaIcon from "@mui/icons-material/SportsMma";
-import PoolIcon from "@mui/icons-material/Pool";
-import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import SportsGymnasticsIcon from "@mui/icons-material/SportsGymnastics";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { dynamicFilterFunc } from "./filterLogic";
+import { ChangeIcon } from "./changeIcon";
 
 export default function FindTraining() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [trainingParam, setTrainingParam] = useState("");
   const [userTrainings, setUserTrainings] = useState([]);
+  const [searchNumQuery, setSearchNumQuery] = useState(null);
+  const [filteredTrainings, setFilteredTrainings] = useState([]);
 
   useEffect(() => {
     const enterFunc = async () => {
@@ -48,41 +47,48 @@ export default function FindTraining() {
   }, [navigate]);
 
   useEffect(() => {
-    const GetTrainigs = async () => {
+    const GetTrainings = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3101/api/main/training/",
           { withCredentials: true }
         );
-        console.log(response);
         if (response.data) {
           const result = response.data;
           setUserTrainings(result);
-        } else return setError("error!!!");
+          setFilteredTrainings(result);
+        }
       } catch (error) {
         console.error(error);
       }
     };
-    GetTrainigs();
+    GetTrainings();
   }, []);
 
-  const ChangeIcon = (sport) => {
-    switch (sport) {
-      case "Swimming":
-        return <PoolIcon />;
-      case "Running":
-        return <DirectionsRunIcon />;
-      case "Power-Lifting":
-        return <FitnessCenterIcon />;
-      case "Fitness":
-        return <SportsGymnasticsIcon />;
-      case "Boxing":
-        return <SportsMmaIcon />;
-      case "Cross-Fit":
-        return <EmojiEventsIcon />;
-      default:
-        return null;
-    }
+  const handleSearchQueryChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    const filteredResults = dynamicFilterFunc(
+      userTrainings,
+      trainingParam,
+      query,
+      searchNumQuery
+    );
+    setFilteredTrainings(filteredResults);
+  };
+
+  const handleSearchNumQueryChange = (e, newValue) => {
+    const numQuery = newValue;
+    setSearchNumQuery(numQuery);
+
+    const filteredResults = dynamicFilterFunc(
+      userTrainings,
+      trainingParam,
+      searchQuery,
+      numQuery
+    );
+    setFilteredTrainings(filteredResults);
   };
 
   return (
@@ -94,7 +100,7 @@ export default function FindTraining() {
         flexDirection: "column",
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.secondary.main,
-        minHeight:"100vh",
+        minHeight: "100vh",
       }}
     >
       <Header />
@@ -119,93 +125,146 @@ export default function FindTraining() {
             mr: 4,
             width: "100%",
             height: "100%",
-            overflow: "hidden", // Убираем overflow, чтобы карточки не выходили за границы контейнера
+            overflow: "hidden",
           }}
         >
           <Box
             sx={{
               borderBottom: 1,
               pt: 1,
+              minWidth: 500,
             }}
           >
             <h2 style={{ padding: 0, margin: 0 }}>Find. Your. Challenge.</h2>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 4,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <FormControl margin="dense" sx={{ minWidth: 120 }}>
+                <InputLabel id="filterParam">Filter by</InputLabel>
+                <Select
+                  labelId="filterParam"
+                  id="filterParam"
+                  value={trainingParam}
+                  label="Filter by"
+                  onChange={(e) => setTrainingParam(e.target.value)}
+                >
+                  <MenuItem value={"level"}>Level</MenuItem>
+                  <MenuItem value={"sports"}>Sport</MenuItem>
+                  <MenuItem value={"energy"}>Calories</MenuItem>
+                  <MenuItem value={"duration"}>Duration</MenuItem>
+                  <MenuItem value={"trainers"}>Trainer</MenuItem>
+                </Select>
+              </FormControl>
+              {trainingParam === "energy" ? (
+                <Slider
+                  aria-label="kCal"
+                  defaultValue={300}
+                  valueLabelDisplay="auto"
+                  step={50}
+                  marks
+                  min={300}
+                  max={800}
+                  onChange={handleSearchNumQueryChange}
+                />
+              ) : trainingParam === "duration" ? (
+                <Slider
+                  aria-label="Duration"
+                  defaultValue={45}
+                  valueLabelDisplay="auto"
+                  step={10}
+                  marks
+                  min={45}
+                  max={120}
+                  onChange={handleSearchNumQueryChange}
+                />
+              ) : (
+                <TextField
+                  value={searchQuery}
+                  label="Type here"
+                  margin="dense"
+                  onChange={handleSearchQueryChange}
+                ></TextField>
+              )}
+            </Box>
           </Box>
-          {userTrainings.length > 0 ? (
+          {filteredTrainings.length > 0 ? (
             <Box
               sx={{
                 mt: 5,
-                width: "100%", 
+                width: "100%",
                 display: "flex",
-                flexWrap: "wrap", 
-                justifyContent: "center", 
-                gap: 3, 
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 3,
               }}
             >
-              {userTrainings.map((t, index) => {
-                return (
-                  <Box
-                    key={index}
+              {filteredTrainings.map((t, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    minWidth: 200,
+                    maxWidth: 300,
+                    flex: "1 1 200px",
+                    border: 1,
+                    height: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    padding: 2,
+                    m: 1,
+                    ":hover": {
+                      scale: "1.05",
+                      transition: "0.25s",
+                    },
+                  }}
+                >
+                  <h3 style={{ margin: "10px" }}>{t.sports}</h3>
+                  <Box sx={{ m: 0 }}>{ChangeIcon(t.sports)}</Box>
+                  <p>
+                    Level:{" "}
+                    <b
+                      style={
+                        t.level === "Hard"
+                          ? { color: "Red" }
+                          : t.level === "Medium"
+                          ? { color: "yellow" }
+                          : { color: "green" }
+                      }
+                    >
+                      {t.level}
+                    </b>
+                  </p>
+                  <p>Wasting: {t.energy} ccal</p>
+                  <p>Duration: {t.duration} Minutes</p>
+                  <p>
+                    Trainer:{" "}
+                    <b>
+                      {t.trainers[0].surname} {t.trainers[0].name}
+                    </b>
+                  </p>
+                  <p>Status: {t.status}</p>
+                  <Button
+                    type="submit"
+                    variant="contained"
                     sx={{
-                      minWidth: 200,
-                      maxWidth: 300,
-                      flex: "1 1 200px", 
-                      border: 1,
-                      height: "auto",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      padding: 2,
-                      m: 1,
+                      my: 1,
                       ":hover": {
-                        scale: "1.05",
-                        transition: "0.25s",
+                        backgroundColor: () =>
+                          theme.palette.mode === "light"
+                            ? "#313131"
+                            : "#b5b5b5",
                       },
                     }}
                   >
-                    <h3 style={{ margin: "10px" }}>{t.sports}</h3>
-                    <Box sx={{ m: 0 }}>{ChangeIcon(t.sports)}</Box>
-                    <p>
-                      Level:{" "}
-                      <b
-                        style={
-                          t.level === "Hard"
-                            ? { color: "Red" }
-                            : t.level === "Medium"
-                            ? { color: "yellow" }
-                            : { color: "green" }
-                        }
-                      >
-                        {t.level}
-                      </b>
-                    </p>
-                    <p>Wasting: {t.energy} ccal</p>
-                    <p>Duration: {t.duration} Minutes</p>
-                    <p>
-                      Trainer:{" "}
-                      <b>
-                        {t.trainers[0].surname} {t.trainers[0].name}
-                      </b>
-                    </p>
-                    <p>Status: {t.status}</p>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{
-                        mt: 1,
-                        mb: 2,
-                        ":hover": {
-                          backgroundColor: () =>
-                            theme.palette.mode === "light"
-                              ? "#313131"
-                              : "#b5b5b5",
-                        },
-                      }}
-                    >
-                      Take Challenge
-                    </Button>
-                  </Box>
-                );
-              })}
+                    Take Challenge
+                  </Button>
+                </Box>
+              ))}
             </Box>
           ) : (
             <Box>

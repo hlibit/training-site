@@ -67,13 +67,9 @@ export default function Sidebar() {
         minWidth: 300,
         width: "26%",
         minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-        alignItems: "center",
       }}
     >
-      <List sx={{ m: 0, p: 0, width: "100%",position:"sticky"}}>
+      <List sx={{ m: 0, p: 0, width: "100%",}}>
         <ListItem disablePadding>
           <ListItemButton
             sx={{
