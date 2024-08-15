@@ -1,6 +1,8 @@
+const { CanceledTraining } = require("./CancelledTraining");
 const { Sportsman } = require("./Sportsman");
 const { Trainer } = require("./Trainer");
 const { Training } = require("./Training");
+
 const {
   validate,
   validateAuth,
@@ -18,4 +20,5 @@ module.exports = {
   validateAuth,
   validateEditedUser,
   validateNewPassword,
+  CanceledTraining
 };

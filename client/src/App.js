@@ -9,6 +9,7 @@ import ProfilePage from "./components/mainPage/profilePage/profilePage";
 import Security from "./components/mainPage/securityPage.jsx/securityPage";
 import CreateTraining from "./components/mainPage/createTraining/createTraining";
 import FindTraining from "./components/mainPage/findTraining/findTraining";
+import YourTraining from "./components/mainPage/yourTrainings/yourTrainings";
 
 function NotFound() {
   return <h2>Not Found</h2>;
@@ -25,6 +26,7 @@ function App() {
             <Route path="/main/profile" element={<ProfilePage />} />
             <Route path="/main/security" element={<Security />} />
             <Route path="/main/create" element={<CreateTraining />} />
+            <Route path="/main/your-trainings" element={<YourTraining />} />
             <Route path="/main/find-training" element={<FindTraining />}/>
             <Route exact path="/register" element={<Register />} />
             <Route path="/login" element={<LoginPage />} />

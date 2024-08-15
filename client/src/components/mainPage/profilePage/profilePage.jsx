@@ -9,6 +9,8 @@ import {
   Button,
   TextField,
   Select,
+  Typography,
+  Rating,
   MenuItem,
   InputLabel,
   FormControl,
@@ -22,6 +24,7 @@ export default function ProfilePage() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [age, setAge] = useState();
+  const [rating,setRating] = useState(null);
   const [sports, setSports] = useState("Fitness");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -42,6 +45,7 @@ export default function ProfilePage() {
         setAge(response.data.data.age);
         setSports(response.data.data.sports);
         setEmail(response.data.data.email);
+        setRating(response.data.data.rating);
       } catch (error) {
         if (error.response && error.response.data.unLogged) {
           navigate("/login");
@@ -152,7 +156,13 @@ export default function ProfilePage() {
               <p style={{ color: "gray", padding: 0, margin: "5px" }}>
                 Change information about yourself
               </p>
+              <Box sx={{display:"flex",gap:2,alignItems:"center",justifyContent:"center"}}>
+                <Typography component="legend">Your Rating:</Typography>
+                <Rating name="your-rating" value={rating} readOnly max={10} precision={0.5}/>
+                <p>{rating}</p>
+              </Box>
             </Box>
+
             <Box
               component="form"
               onSubmit={handleEditSubmit}
@@ -187,6 +197,7 @@ export default function ProfilePage() {
                   {message}
                 </Box>
               )}
+              
               <TextField
                 margin="normal"
                 required

@@ -3,7 +3,7 @@ const logoutRouter = express.Router();
 
 
 logoutRouter.post("/logout", async (req,res)=>{
-    if(req.session.userId){
+    if(req.session){
         req.session.destroy();
         res.status(200).json({
             message:"You logout successfully!",

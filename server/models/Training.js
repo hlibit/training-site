@@ -36,7 +36,8 @@ const TrainingSchema = new Schema(
       required: true,
       enum:[
         "Pending",
-        "Finished"
+        "Finished",
+        "Canceled"
       ]
     },
 

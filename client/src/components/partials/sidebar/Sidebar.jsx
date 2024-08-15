@@ -108,6 +108,17 @@ export default function Sidebar() {
             <ListItemText primary="Security" />
           </ListItemButton>
         </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={()=> navigate("/main/your-trainings")}>
+            <ListItemIcon>
+              <HistoryIcon
+                sx={{ color: theme.palette.primary.main }}
+                fontSize="large"
+              />
+            </ListItemIcon>
+            <ListItemText primary="Your Trainings" />
+          </ListItemButton>
+        </ListItem>
         {userType === "Trainer" ? (
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate("/main/create")}>

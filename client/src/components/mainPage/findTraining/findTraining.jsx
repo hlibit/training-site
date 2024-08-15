@@ -124,6 +124,10 @@ export default function FindTraining() {
     setFilteredTrainings(filteredResults);
   };
 
+  const filteredAndActiveTrainings = filteredTrainings.filter(
+    (t) => t.status !== "Canceled" && t.status !== "Finished"
+  );
+
   return (
     <Container
       disableGutters
@@ -173,7 +177,7 @@ export default function FindTraining() {
               <Box
                 sx={{
                   textAlign: "center",
-                  color: "greean",
+                  color: "green",
                   p: 1,
                   border: 0.5,
                   borderColor: "green",
@@ -239,7 +243,7 @@ export default function FindTraining() {
               )}
             </Box>
           </Box>
-          {filteredTrainings.length > 0 ? (
+          {filteredAndActiveTrainings.length > 0 ? (
             <Box
               sx={{
                 mt: 5,
@@ -250,7 +254,7 @@ export default function FindTraining() {
                 gap: 3,
               }}
             >
-              {filteredTrainings.map((t, index) => (
+              {filteredAndActiveTrainings.map((t, index) => (
                 <Box
                   key={index}
                   sx={{
@@ -272,6 +276,7 @@ export default function FindTraining() {
                 >
                   <h3 style={{ margin: "10px" }}>{t.sports}</h3>
                   <Box sx={{ m: 0 }}>{ChangeIcon(t.sports)}</Box>
+                  <p></p>
                   <p>
                     Level:{" "}
                     <b
