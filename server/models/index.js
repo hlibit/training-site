@@ -1,4 +1,4 @@
-const { CanceledTraining } = require("./CancelledTraining");
+const { trainingHistory } = require("./histroryTraining");
 const { Sportsman } = require("./Sportsman");
 const { Trainer } = require("./Trainer");
 const { Training } = require("./Training");
@@ -11,14 +11,15 @@ const {
   validateNewPassword,
 } = require("./autorization");
 
+
 module.exports = {
   Sportsman,
   Trainer,
   Training,
+  trainingHistory,
   validate,
   validateTraining,
   validateAuth,
   validateEditedUser,
   validateNewPassword,
-  CanceledTraining
 };

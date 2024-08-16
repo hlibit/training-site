@@ -40,7 +40,6 @@ const TrainingSchema = new Schema(
         "Canceled"
       ]
     },
-
     sportsmen: [{ type: Schema.Types.ObjectId, ref: "Sportsman" }],
     trainers: [{ type: Schema.Types.ObjectId, ref: "Trainer" }],
   },

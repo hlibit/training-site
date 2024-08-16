@@ -299,7 +299,6 @@ export default function FindTraining() {
                       {t.trainers[0].surname} {t.trainers[0].name}
                     </b>
                   </p>
-                  <p>Status: {t.status}</p>
                   <Button
                     type="submit"
                     variant="contained"

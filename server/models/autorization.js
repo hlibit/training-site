@@ -114,10 +114,10 @@ const trainingValidaionSchema = Joi.object({
         "number.max": `"duration" must be at most {#limit}`,
         "any.required": `"duration" is required`
     }),
-    status: Joi.string().required().valid('Pending', 'Finished','Canceled').messages({
+    status: Joi.string().required().valid('Finished','Canceled','Pending').messages({
         "string.base": `"status" should be a string`,
         "string.empty": `"status" must not be empty`,
-        "any.only": `"status" must be one of [Pending, Finished]`,
+        "any.only": `"status" must be one of [Canceled, Finished]`,
         "any.required": `"status" is required`
     }),
 })

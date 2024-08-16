@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const {
   Training,
   Trainer,
-  CanceledTraining,
+  trainingHistory,
   validateTraining,
   Sportsman,
 } = require("../../../models/index");
@@ -158,30 +158,66 @@ const SwitchStatusTraining = async (req, res) => {
       .populate("trainers")
       .populate("sportsmen");
 
-    if (!training) {
-      return res.status(404).json({ message: "Training not found" });
-    }
-
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const userId = decoded.id;
+
     const sportsman = await Sportsman.findById(userId);
     const trainer = await Trainer.findById(training.trainers[0]._id);
 
     if (status === "Finished") {
+      const curSportsmen = await Sportsman.find({ trainings: trainingId });
       training.status = status;
       await training.save();
+
+      const finishedTraining = new trainingHistory({
+        status,
+        canceledBy: "None",
+        trainings: training,
+        sportsmen: curSportsmen,
+        trainers: trainer,
+      });
+
+      await finishedTraining.save();
+
+      for (let curSportsman of curSportsmen) {
+        curSportsman.trainings.pull(training._id);
+        await curSportsman.save();
+
+        const trainerHasActiveTrainings = await Training.exists({
+          trainers: trainer._id,
+          sportsmen: curSportsman._id,
+          status: { $ne: "Finished" },
+        });
+
+        if (!trainerHasActiveTrainings) {
+          trainer.sportsmen.pull(curSportsman._id);
+          curSportsman.trainers.pull(trainer._id);
+          await trainer.save();
+          await curSportsman.save();
+        }
+      }
+
+      trainer.trainings.pull(trainingId);
+      await trainer.save();
+
+      await Training.findByIdAndDelete(trainingId);
       return res.status(200).json({ message: "Training finished" });
     } else {
       if (sportsman) {
-        const cancelledTraining = new CanceledTraining({
-          cancelledBy: `${sportsman.name} ${sportsman.surname}`,
+        const cancelledTraining = new trainingHistory({
+          status,
+          canceledBy: "Sportsman",
           trainings: training,
+          sportsmen: sportsman,
+          trainers: trainer,
         });
         await cancelledTraining.save();
+        training.status = status;
+        await training.save();
 
-        training.sportsmen.pull({ _id: sportsman._id });
-        sportsman.trainings.pull({ _id: training._id });
-        sportsman.rating -=0.5;
+        training.sportsmen.pull(sportsman._id);
+        sportsman.trainings.pull(training._id);
+        sportsman.rating -= 0.5;
         await sportsman.save();
         await training.save();
 
@@ -192,8 +228,8 @@ const SwitchStatusTraining = async (req, res) => {
         });
 
         if (!trainerHasActiveTrainings) {
-          trainer.sportsmen.pull({ _id: sportsman._id });
-          sportsman.trainers.pull({ _id: trainer._id });
+          trainer.sportsmen.pull(sportsman._id);
+          sportsman.trainers.pull(trainer._id);
           await trainer.save();
           await sportsman.save();
         }
@@ -204,18 +240,21 @@ const SwitchStatusTraining = async (req, res) => {
       } else if (trainer) {
         const curSportsmen = await Sportsman.find({ trainings: trainingId });
 
-        for (let curSportsman of curSportsmen) {
-          const cancelledTraining = new CanceledTraining({
-            cancelledBy: `${trainer.name} ${trainer.surname}`,
-            trainings: training,
-          });
-          await cancelledTraining.save();
+        const cancelledTraining = new trainingHistory({
+          status,
+          canceledBy: "Trainer",
+          trainings: training,
+          sportsmen: curSportsmen,
+          trainers: trainer,
+        });
 
-          curSportsman.trainings.pull({ _id: training._id });
+        await cancelledTraining.save();
+
+        for (let curSportsman of curSportsmen) {
+          curSportsman.trainings.pull(training._id);
           await curSportsman.save();
           training.status = status;
           await training.save();
-
           const trainerHasActiveTrainings = await Training.exists({
             trainers: trainer._id,
             sportsmen: curSportsman._id,
@@ -223,14 +262,14 @@ const SwitchStatusTraining = async (req, res) => {
           });
 
           if (!trainerHasActiveTrainings) {
-            trainer.sportsmen.pull({ _id: curSportsman._id });
-            curSportsman.trainers.pull({ _id: trainer._id });
+            trainer.sportsmen.pull(curSportsman._id);
+            curSportsman.trainers.pull(trainer._id);
             await trainer.save();
             await curSportsman.save();
           }
         }
 
-        trainer.trainings.pull({ _id: trainingId });
+        trainer.trainings.pull(trainingId);
         trainer.rating -= 0.5;
         await trainer.save();
 

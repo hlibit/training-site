@@ -163,10 +163,10 @@ export default function YourTraining() {
               </Box>
             )}
           </Box>
-          {userTrainings.length > 0 &&
+          {userTrainings.length > 0 /* &&
           userTrainings.some(
             (t) => t.status !== "Canceled" && t.status !== "Finished"
-          ) ? (
+          )*/ ? (
             <Box
               sx={{
                 my: 3,
@@ -178,169 +178,154 @@ export default function YourTraining() {
               }}
             >
               {userType === "Sportsman"
-                ? userTrainings.map(
-                    (t, index) =>
-                      t.status === "Pending" && (
-                        <Box
-                          key={index}
-                          sx={{
-                            minWidth: 200,
-                            maxWidth: 300,
-                            flex: "1 1 200px",
-                            border: 1,
-                            height: "auto",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            padding: 2,
-                            m: 1,
-                            ":hover": {
-                              scale: "1.05",
-                              transition: "0.25s",
-                            },
-                          }}
+                ? userTrainings.map((t, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        minWidth: 200,
+                        maxWidth: 300,
+                        flex: "1 1 200px",
+                        border: 1,
+                        height: "auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        padding: 2,
+                        m: 1,
+                        ":hover": {
+                          scale: "1.05",
+                          transition: "0.25s",
+                        },
+                      }}
+                    >
+                      <h3 style={{ margin: "10px" }}>{t.sports}</h3>
+                      <Box sx={{ m: 0 }}>{ChangeIcon(t.sports)}</Box>
+                      <p>
+                        Level:{" "}
+                        <b
+                          style={
+                            t.level === "Hard"
+                              ? { color: "Red" }
+                              : t.level === "Medium"
+                              ? { color: "yellow" }
+                              : { color: "green" }
+                          }
                         >
-                          <h3 style={{ margin: "10px" }}>{t.sports}</h3>
-                          <Box sx={{ m: 0 }}>{ChangeIcon(t.sports)}</Box>
-                          <p>
-                            Level:{" "}
-                            <b
-                              style={
-                                t.level === "Hard"
-                                  ? { color: "Red" }
-                                  : t.level === "Medium"
-                                  ? { color: "yellow" }
-                                  : { color: "green" }
-                              }
-                            >
-                              {t.level}
-                            </b>
-                          </p>
-                          <p>Wasting: {t.energy} ccal</p>
-                          <p>Duration: {t.duration} Minutes</p>
-                          <p>
-                            Trainer:{" "}
-                            <b>
-                              {t.trainers[0].surname} {t.trainers[0].name}
-                            </b>
-                          </p>
-                          <p>Status: {t.status}</p>
-                          <Button
-                            variant="contained"
-                            onClick={() =>
-                              handlerChangeStatus("Canceled", t._id)
-                            }
-                            sx={{
-                              my: 1,
-                              ":hover": {
-                                backgroundColor: () =>
-                                  theme.palette.mode === "light"
-                                    ? "#313131"
-                                    : "#b5b5b5",
-                              },
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </Box>
-                      )
-                  )
-                : userTrainings.map(
-                    (t, index) =>
-                      t.status === "Pending" && (
-                        <Box
-                          key={index}
-                          sx={{
-                            minWidth: 200,
-                            maxWidth: 300,
-                            flex: "1 1 200px",
-                            border: 1,
-                            height: "auto",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            padding: 2,
-                            m: 1,
-                            ":hover": {
-                              scale: "1.05",
-                              transition: "0.25s",
-                            },
-                          }}
+                          {t.level}
+                        </b>
+                      </p>
+                      <p>Wasting: {t.energy} ccal</p>
+                      <p>Duration: {t.duration} Minutes</p>
+                      <p>
+                        Trainer:{" "}
+                        <b>
+                          {t.trainers[0].surname} {t.trainers[0].name}
+                        </b>
+                      </p>
+                      <Button
+                        variant="contained"
+                        onClick={() => handlerChangeStatus("Canceled", t._id)}
+                        sx={{
+                          my: 1,
+                          ":hover": {
+                            backgroundColor: () =>
+                              theme.palette.mode === "light"
+                                ? "#313131"
+                                : "#b5b5b5",
+                          },
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
+                  ))
+                : userTrainings.map((t, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        minWidth: 200,
+                        maxWidth: 300,
+                        flex: "1 1 200px",
+                        border: 1,
+                        height: "auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        padding: 2,
+                        m: 1,
+                        ":hover": {
+                          scale: "1.05",
+                          transition: "0.25s",
+                        },
+                      }}
+                    >
+                      <h3 style={{ margin: "10px" }}>{t.sports}</h3>
+                      <Box sx={{ m: 0 }}>{ChangeIcon(t.sports)}</Box>
+                      <p>
+                        Level:{" "}
+                        <b
+                          style={
+                            t.level === "Hard"
+                              ? { color: "Red" }
+                              : t.level === "Medium"
+                              ? { color: "yellow" }
+                              : { color: "green" }
+                          }
                         >
-                          <h3 style={{ margin: "10px" }}>{t.sports}</h3>
-                          <Box sx={{ m: 0 }}>{ChangeIcon(t.sports)}</Box>
-                          <p>
-                            Level:{" "}
-                            <b
-                              style={
-                                t.level === "Hard"
-                                  ? { color: "Red" }
-                                  : t.level === "Medium"
-                                  ? { color: "yellow" }
-                                  : { color: "green" }
-                              }
-                            >
-                              {t.level}
-                            </b>
-                          </p>
-                          <p>Wasting: {t.energy} ccal</p>
-                          <p>Duration: {t.duration} Minutes</p>
+                          {t.level}
+                        </b>
+                      </p>
+                      <p>Wasting: {t.energy} ccal</p>
+                      <p>Duration: {t.duration} Minutes</p>
 
-                          <ul>
-                            {" "}
-                            Sportsmen: {""}
-                            {t.sportsmen.length > 0 ? (
-                              t.sportsmen.map((s, index) => {
-                                return (
-                                  <li key={index}>
-                                    <b>
-                                      {s.name} {s.surname}
-                                    </b>
-                                  </li>
-                                );
-                              })
-                            ) : (
-                              <li>
-                                <b>No sportsmen</b>
+                      <ul>
+                        {" "}
+                        Sportsmen: {""}
+                        {t.sportsmen.length > 0 ? (
+                          t.sportsmen.map((s, index) => {
+                            return (
+                              <li key={index}>
+                                <b>
+                                  {s.name} {s.surname}
+                                </b>
                               </li>
-                            )}
-                          </ul>
-
-                          <p>Status: {t.status}</p>
-                          <Button
-                            variant="outlined"
-                            onClick={() =>
-                              handlerChangeStatus("Finished", t._id)
-                            }
-                            sx={{
-                              my: 1,
-                              ":hover": {
-                                backgroundColor: "#bf2626",
-                              },
-                            }}
-                          >
-                            Finished
-                          </Button>
-                          <Button
-                            variant="contained"
-                            onClick={() =>
-                              handlerChangeStatus("Canceled", t._id)
-                            }
-                            sx={{
-                              my: 1,
-                              ":hover": {
-                                backgroundColor: () =>
-                                  theme.palette.mode === "light"
-                                    ? "#313131"
-                                    : "#b5b5b5",
-                              },
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </Box>
-                      )
-                  )}
+                            );
+                          })
+                        ) : (
+                          <li>
+                            <b>No sportsmen</b>
+                          </li>
+                        )}
+                      </ul>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handlerChangeStatus("Finished", t._id)}
+                        sx={{
+                          my: 1,
+                          ":hover": {
+                            backgroundColor: "#bf2626",
+                          },
+                        }}
+                      >
+                        Finished
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handlerChangeStatus("Canceled", t._id)}
+                        sx={{
+                          my: 1,
+                          ":hover": {
+                            backgroundColor: () =>
+                              theme.palette.mode === "light"
+                                ? "#313131"
+                                : "#b5b5b5",
+                          },
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
+                  ))}
             </Box>
           ) : (
             <Box>
