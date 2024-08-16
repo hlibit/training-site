@@ -11,7 +11,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import HistoryIcon from "@mui/icons-material/History";
 import SecurityIcon from "@mui/icons-material/Security";
-import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
+import PageviewIcon from "@mui/icons-material/Pageview";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -35,7 +36,7 @@ export default function Sidebar() {
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -51,10 +52,9 @@ export default function Sidebar() {
           borderRightColor: theme.palette.primary.border,
           minWidth: 300,
           width: "26%",
-          height:"100%",
+          height: "100%",
         }}
-      >
-      </Box>
+      ></Box>
     );
   }
 
@@ -69,7 +69,7 @@ export default function Sidebar() {
         minHeight: "100vh",
       }}
     >
-      <List sx={{ m: 0, p: 0, width: "100%",}}>
+      <List sx={{ m: 0, p: 0, width: "100%" }}>
         <ListItem disablePadding>
           <ListItemButton
             sx={{
@@ -109,9 +109,9 @@ export default function Sidebar() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={()=> navigate("/main/your-trainings")}>
+          <ListItemButton onClick={() => navigate("/main/your-trainings")}>
             <ListItemIcon>
-              <HistoryIcon
+              <ListAltOutlinedIcon
                 sx={{ color: theme.palette.primary.main }}
                 fontSize="large"
               />
@@ -133,9 +133,9 @@ export default function Sidebar() {
           </ListItem>
         ) : (
           <ListItem disablePadding>
-            <ListItemButton onClick={()=> navigate("/main/find-training")}>
+            <ListItemButton onClick={() => navigate("/main/find-training")}>
               <ListItemIcon>
-                <ListAltOutlinedIcon
+                <PageviewIcon
                   sx={{ color: theme.palette.primary.main }}
                   fontSize="large"
                 />
@@ -146,7 +146,7 @@ export default function Sidebar() {
         )}
 
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("/main/history")}>
             <ListItemIcon>
               <HistoryIcon
                 sx={{ color: theme.palette.primary.main }}

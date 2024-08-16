@@ -172,7 +172,15 @@ const SwitchStatusTraining = async (req, res) => {
       const finishedTraining = new trainingHistory({
         status,
         canceledBy: "None",
-        trainings: training,
+        trainings: {
+          _id: training._id,
+          sports: training.sports,
+          level: training.level,
+          energy: training.energy,
+          duration: training.duration,
+          status: training.status,
+          sportsmen: training.sportsmen,
+        },
         sportsmen: curSportsmen,
         trainers: trainer,
       });
@@ -207,7 +215,15 @@ const SwitchStatusTraining = async (req, res) => {
         const cancelledTraining = new trainingHistory({
           status,
           canceledBy: "Sportsman",
-          trainings: training,
+          trainings: {
+            _id: training._id,
+            sports: training.sports,
+            level: training.level,
+            energy: training.energy,
+            duration: training.duration,
+            status: training.status,
+            sportsmen: training.sportsmen,
+          },
           sportsmen: sportsman,
           trainers: trainer,
         });
@@ -243,7 +259,15 @@ const SwitchStatusTraining = async (req, res) => {
         const cancelledTraining = new trainingHistory({
           status,
           canceledBy: "Trainer",
-          trainings: training,
+          trainings: {
+            _id: training._id,
+            sports: training.sports,
+            level: training.level,
+            energy: training.energy,
+            duration: training.duration,
+            status: training.status,
+            sportsmen: training.sportsmen,
+          },
           sportsmen: curSportsmen,
           trainers: trainer,
         });
@@ -286,10 +310,45 @@ const SwitchStatusTraining = async (req, res) => {
   }
 };
 
+const GetHistory = async (req, res) => {
+  const token = req.cookies.token;
+  const decoded = jwt.verify(token, process.env.SECRET_KEY);
+  const userId = decoded.id;
+  try {
+    const sportsman = await Sportsman.findById(userId);
+    if (sportsman) {
+      const sportsmanHistory = await trainingHistory
+        .find({ sportsmen: sportsman._id })
+        .populate("trainings")
+        .populate("trainers");
+      res
+        .status(200)
+        .json({ history: sportsmanHistory, typeUser: sportsman.typeUser });
+    } else {
+      const trainer = await Trainer.findById(userId);
+      const trainerHistory = await trainingHistory
+        .find({
+          trainers: trainer._id,
+          $or: [{ status: "Finished" }, { canceledBy: "Trainer" }],
+        })
+        .populate("trainings")
+        .populate("sportsmen");
+      res
+        .status(200)
+        .json({ history: trainerHistory, typeUser: trainer.typeUser });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `Internal server error: ${error.message}` });
+  }
+};
+
 module.exports = {
   CreateTraining,
   GetTrainings,
   AddSportsmanTraining,
   GetUserTrainings,
   SwitchStatusTraining,
+  GetHistory,
 };
